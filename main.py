@@ -93,7 +93,7 @@ def get_image_url():
 # ============================================================
 def publish_to_instagram(image_url, caption):
     # Шаг 1: Создаём медиа-контейнер
-    create_url = f"https://graph.facebook.com/v21.0/{INSTAGRAM_USER_ID}/media"
+    create_url = f"https://graph.instagram.com/v21.0/{INSTAGRAM_USER_ID}/media"
     
     response = requests.post(create_url, data={
         "image_url": image_url,
@@ -112,7 +112,7 @@ def publish_to_instagram(image_url, caption):
     time.sleep(5)
     
     # Шаг 2: Публикуем
-    publish_url = f"https://graph.facebook.com/v21.0/{INSTAGRAM_USER_ID}/media_publish"
+    publish_url = f"https://graph.instagram.com/v21.0/{INSTAGRAM_USER_ID}/media_publish"
     
     publish_response = requests.post(publish_url, data={
         "creation_id": container_id,
