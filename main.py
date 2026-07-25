@@ -11,7 +11,6 @@ from datetime import datetime
 INSTAGRAM_ACCESS_TOKEN = os.environ.get("INSTAGRAM_ACCESS_TOKEN", "")
 INSTAGRAM_USER_ID = os.environ.get("INSTAGRAM_USER_ID", "27857289577221820")
 GROQ_API_KEY = os.environ.get("GROQ_API_KEY", "")
-PEXELS_API_KEY = os.environ.get("PEXELS_API_KEY", "")
 
 POST_HOUR = 10  # Время публикации (UTC+3 = 07:00 UTC)
 
@@ -36,14 +35,14 @@ TOPICS = [
     "Как правильно ухаживать за подоконником, чтобы он служил долго",
 ]
 
-# Ключевые слова для поиска фото на Pexels под каждую тему (по-английски, для лучшего поиска)
-IMAGE_KEYWORDS = [
-    "windowsill close up",
-    "windowsill plants",
-    "window sill decor",
-    "windowsill flowers",
-    "windowsill sunlight",
-    "window ledge interior",
+# Промпты для генерации изображений через Pollinations AI
+IMAGE_PROMPTS = [
+    "modern white acrylic stone windowsill with sunlight, photorealistic, interior design",
+    "elegant acrylic stone windowsill close up, minimalist interior, soft daylight",
+    "seamless acrylic stone windowsill in modern apartment, photorealistic",
+    "acrylic stone windowsill with small plants, cozy interior, natural light",
+    "glossy acrylic stone windowsill detail, modern home interior, photorealistic",
+    "acrylic stone windowsill in bright Scandinavian style room, photorealistic",
 ]
 
 # ============================================================
@@ -70,7 +69,7 @@ def generate_post_text(topic):
 - Начни с цепляющего первого предложения
 - Добавь 3-4 конкретных практических совета
 - Заверши призывом к действию (задай вопрос аудитории)
-- В конце добавь 5-7 хэштегов на русском и английском
+- В конце добавь 5-7 хэштегов на русском и английском, используя только буквы и цифры (без иероглифов и посторонних символов)
 - Пиши как будто объясняешь другу, не как корпоративный блог
 
 Пиши только текст поста, без пояснений."""
@@ -86,34 +85,28 @@ def generate_post_text(topic):
     return result["choices"][0]["message"]["content"]
 
 # ============================================================
-# КАРТИНКА (Pexels API — подбор по теме)
+# КАРТИНКА (генерация через Pollinations AI — бесплатно, без ключа)
 # ============================================================
 def get_image_url():
-    keyword = random.choice(IMAGE_KEYWORDS)
+    prompt = random.choice(IMAGE_PROMPTS)
+    encoded_prompt = requests.utils.quote(prompt)
     
-    url = "https://api.pexels.com/v1/search"
-    headers = {
-        "Authorization": PEXELS_API_KEY
-    }
+    url = f"https://image.pollinations.ai/prompt/{encoded_prompt}"
     params = {
-        "query": keyword,
-        "per_page": 10,
-        "orientation": "square"
+        "width": 1080,
+        "height": 1080,
+        "nologo": "true"
     }
     
     try:
-        response = requests.get(url, headers=headers, params=params)
-        result = response.json()
-        
-        photos = result.get("photos", [])
-        if photos:
-            photo = random.choice(photos)
-            return photo["src"]["large"]
+        response = requests.get(url, params=params, timeout=30)
+        if response.status_code == 200:
+            return response.url
         else:
-            print(f"⚠️ Pexels не нашёл фото по запросу '{keyword}', использую запасной вариант")
+            print(f"⚠️ Pollinations вернул код {response.status_code}, использую запасной вариант")
             return "https://picsum.photos/1080/1080"
     except Exception as e:
-        print(f"⚠️ Ошибка Pexels: {e}, использую запасной вариант")
+        print(f"⚠️ Ошибка Pollinations: {e}, использую запасной вариант")
         return "https://picsum.photos/1080/1080"
 
 # ============================================================
