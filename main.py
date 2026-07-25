@@ -38,12 +38,12 @@ TOPICS = [
 
 # Ключевые слова для поиска фото на Pexels под каждую тему (по-английски, для лучшего поиска)
 IMAGE_KEYWORDS = [
-    "windowsill interior",
-    "window sill modern",
-    "window interior design",
-    "modern window",
-    "stone countertop",
-    "interior design window",
+    "windowsill close up",
+    "windowsill plants",
+    "window sill decor",
+    "windowsill flowers",
+    "windowsill sunlight",
+    "window ledge interior",
 ]
 
 # ============================================================
