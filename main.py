@@ -12,7 +12,7 @@ INSTAGRAM_ACCESS_TOKEN = os.environ.get("INSTAGRAM_ACCESS_TOKEN", "")
 INSTAGRAM_USER_ID = os.environ.get("INSTAGRAM_USER_ID", "27857289577221820")
 GROQ_API_KEY = os.environ.get("GROQ_API_KEY", "")
 
-POST_HOUR = 10  # Время публикации (UTC+3 = 07:00 UTC)
+POST_HOUR = 4  # 13:00 по Якутску (UTC+9) = 04:00 UTC
 
 # ============================================================
 # ТЕМЫ ДЛЯ ПОСТОВ
@@ -179,7 +179,8 @@ def create_and_publish_post():
 # ============================================================
 if __name__ == "__main__":
     print(f"⏰ Бот запущен. Публикация каждый день в {POST_HOUR}:00")
-    schedule.every().day.at(f"{POST_HOUR:02d}:00").do(create_and_publish_post)
+   schedule.every().tuesday.at(f"{POST_HOUR:02d}:00").do(create_and_publish_post)
+    schedule.every().wednesday.at(f"{POST_HOUR:02d}:00").do(create_and_publish_post)
     
     while True:
         schedule.run_pending()
