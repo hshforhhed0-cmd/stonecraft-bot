@@ -37,12 +37,12 @@ TOPICS = [
 
 # Промпты для генерации изображений через Pollinations AI
 IMAGE_PROMPTS = [
-    "modern white acrylic stone windowsill with sunlight, photorealistic, interior design",
-    "elegant acrylic stone windowsill close up, minimalist interior, soft daylight",
-    "seamless acrylic stone windowsill in modern apartment, photorealistic",
-    "acrylic stone windowsill with small plants, cozy interior, natural light",
-    "glossy acrylic stone windowsill detail, modern home interior, photorealistic",
-    "acrylic stone windowsill in bright Scandinavian style room, photorealistic",
+    "modern luxury apartment interior, white acrylic stone windowsill, floor to ceiling window, bright daylight, professional real estate photography, ultra realistic, 8k",
+    "contemporary minimalist interior, sleek white acrylic stone windowsill, large modern window, clean lines, architectural photography, photorealistic, high quality",
+    "modern kitchen interior with acrylic stone windowsill, large panoramic window, bright natural light, professional interior photography, ultra realistic",
+    "luxury modern living room, seamless white acrylic stone windowsill, big window, Scandinavian design, professional photography, photorealistic, sharp focus",
+    "high-end modern apartment, glossy acrylic stone windowsill close-up, contemporary window frame, natural light, magazine quality photography, ultra realistic",
+    "modern minimalist bedroom interior, acrylic stone windowsill, large window with city view, professional architectural photography, photorealistic, 8k quality",
 ]
 
 # ============================================================
