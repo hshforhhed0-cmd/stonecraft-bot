@@ -1,3 +1,6 @@
+Вот полный файл с исправленными отступами (единообразно 4 пробела, никаких смешений):
+
+python
 import os
 import requests
 import schedule
@@ -53,12 +56,12 @@ FIXED_HASHTAGS = "#Якутск #Якутия #ЯкутскРемонт #Яку�
 # ============================================================
 def generate_post_text(topic):
     url = "https://api.groq.com/openai/v1/chat/completions"
-    
+
     headers = {
         "Authorization": f"Bearer {GROQ_API_KEY}",
         "Content-Type": "application/json"
     }
-    
+
     payload = {
         "model": "llama-3.3-70b-versatile",
         "messages": [
@@ -83,10 +86,10 @@ def generate_post_text(topic):
         "max_tokens": 1000,
         "temperature": 0.8
     }
-    
+
     response = requests.post(url, headers=headers, json=payload)
     result = response.json()
-    
+
     return result["choices"][0]["message"]["content"]
 
 # ============================================================
@@ -95,14 +98,14 @@ def generate_post_text(topic):
 def get_image_url():
     prompt = random.choice(IMAGE_PROMPTS)
     encoded_prompt = requests.utils.quote(prompt)
-    
+
     url = f"https://image.pollinations.ai/prompt/{encoded_prompt}"
     params = {
         "width": 1080,
         "height": 1080,
         "nologo": "true"
     }
-    
+
     try:
         response = requests.get(url, params=params, timeout=30)
         if response.status_code == 200:
@@ -120,33 +123,33 @@ def get_image_url():
 def publish_to_instagram(image_url, caption):
     # Шаг 1: Создаём медиа-контейнер
     create_url = f"https://graph.instagram.com/v21.0/{INSTAGRAM_USER_ID}/media"
-    
+
     response = requests.post(create_url, data={
         "image_url": image_url,
         "caption": caption,
         "access_token": INSTAGRAM_ACCESS_TOKEN
     })
-    
+
     result = response.json()
-    
+
     if "id" not in result:
         print(f"❌ Ошибка создания контейнера: {result}")
         return False
-    
+
     container_id = result["id"]
     print(f"✅ Контейнер создан: {container_id}")
     time.sleep(5)
-    
+
     # Шаг 2: Публикуем
     publish_url = f"https://graph.instagram.com/v21.0/{INSTAGRAM_USER_ID}/media_publish"
-    
+
     publish_response = requests.post(publish_url, data={
         "creation_id": container_id,
         "access_token": INSTAGRAM_ACCESS_TOKEN
     })
-    
+
     publish_result = publish_response.json()
-    
+
     if "id" in publish_result:
         print(f"✅ Пост опубликован! ID: {publish_result['id']}")
         return True
@@ -159,18 +162,18 @@ def publish_to_instagram(image_url, caption):
 # ============================================================
 def create_and_publish_post():
     print(f"\n🚀 Запуск: {datetime.now().strftime('%Y-%m-%d %H:%M')}")
-    
+
     topic = random.choice(TOPICS)
     print(f"📝 Тема: {topic}")
-    
+
     print("✍️ Генерируем текст...")
     caption = generate_post_text(topic)
     caption = f"{caption}\n\n{FIXED_HASHTAGS}"
     print(f"✅ Текст готов")
-    
+
     image_url = get_image_url()
     print(f"🖼️ Картинка: {image_url}")
-    
+
     print("📤 Публикуем...")
     publish_to_instagram(image_url, caption)
 
@@ -178,10 +181,10 @@ def create_and_publish_post():
 # ЗАПУСК
 # ============================================================
 if __name__ == "__main__":
-    print(f"⏰ Бот запущен. Публикация каждый день в {POST_HOUR}:00")
-   schedule.every().tuesday.at(f"{POST_HOUR:02d}:00").do(create_and_publish_post)
+    print(f"⏰ Бот запущен. Публикация по вторникам и средам в {POST_HOUR}:00 UTC")
+    schedule.every().tuesday.at(f"{POST_HOUR:02d}:00").do(create_and_publish_post)
     schedule.every().wednesday.at(f"{POST_HOUR:02d}:00").do(create_and_publish_post)
-    
+
     while True:
         schedule.run_pending()
         time.sleep(60)
