@@ -1,6 +1,3 @@
-Вот полный файл с исправленными отступами (единообразно 4 пробела, никаких смешений):
-
-python
 import os
 import requests
 import schedule
